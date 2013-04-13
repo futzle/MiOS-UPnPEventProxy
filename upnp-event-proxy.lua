@@ -428,6 +428,15 @@ function processNotificationQueue()
 	return nextTimeout
 end
 
+-- Eliminate old subscriptions to prevent memory leaks.
+function purgeExpiredSubscriptions()
+	for sid, info in pairs(subscriptions) do
+		if (info.expiry < os.time()) then
+			subscriptions[sid] = nil
+		end
+	end
+end
+
 -- Run until instructed to exit (not yet implemented)
 local runServer = true
 
@@ -489,6 +498,9 @@ repeat
 
 	-- Send outstanding notifications.
 	s:settimeout(processNotificationQueue())
+
+  purgeExpiredSubscriptions()
+
 until not runServer
 
 s:close()
