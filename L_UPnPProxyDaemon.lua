@@ -174,6 +174,8 @@ function createSubscription(sid, expiry, clearProxy)
 			proxy = {},
 			expiry = expiry,
 		}
+	elseif (expiry) then
+		subscriptions[sid].expiry = expiry
 	end
 	if (clearProxy) then
 		subscriptions[sid].proxy = {}

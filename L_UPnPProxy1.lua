@@ -54,7 +54,7 @@ stop() {
 		if [ -d "/proc/$PID" ]; then
 			COMMAND=$(readlink "/proc/$PID/exe")
 			if [ "$COMMAND" = "/usr/bin/lua" ]; then
-				/bin/kill "$PID" && /bin/rm "$PID_FILE"
+				/bin/kill -KILL "$PID" && /bin/rm "$PID_FILE"
 				return 0
 			fi
 		fi
