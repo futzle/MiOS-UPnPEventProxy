@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<implementation>
+	<functions>
+local plugin
+
+function initialize(lul_device)
+	-- Put the /etc/cmh-ludl and /etc/cmh-lu directories into the Lua include path.
+	if (package.path:find("/etc/cmh-ludl/?.lua;/etc/cmh-lu/?.lua", 1, true) == nil) then
+		package.path = package.path .. ";/etc/cmh-ludl/?.lua;/etc/cmh-lu/?.lua"
+	end
+	-- Load the Lua implementation.
+	package.loaded.L_UPnPProxy1 = nil
+	plugin = require("L_UPnPProxy1")
+	restartNeeded = plugin.restartNeeded
+	updateProxyVersion = plugin.updateProxyVersion
+	-- Call initialization code.
+	return plugin.initialize(lul_device)
+end
+	</functions>
+
+	<startup>initialize</startup>
+
+	<actionList>
+		<action>
+			<serviceId>urn:futzle-com:serviceId:UPnPProxy1</serviceId>
+			<name>uninstall</name>
+			<run>
+				return plugin.uninstall(lul_device)
+			</run>
+		</action>
+	</actionList>
+</implementation>
